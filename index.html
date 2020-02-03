@@ -10,14 +10,20 @@
     <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Test</h1>
+    <h1>SKU Scraper</h1>
+    <input id = "styleNums" placeholder="Style Numbers"></input>
+    <button value='send' id="submit" onclick="getStyles()">Submit</button>
+
     <script>
-    var name = "FQ0005693";
-    let rockyURL = "https://www.rockyboots.com/";
-    var url = "https://cors-anywhere.herokuapp.com/" + rockyURL + name + ".html";
-    $.get(url, function(response) {
-        console.log(response);
-    });
+    function getStyles() {
+        let styleNums = document.getElementById("styleNums").value;
+        console.log(styleNums);
+        let rockyURL = "https://www.rockyboots.com/";
+        var url = "https://cors-anywhere.herokuapp.com/" + rockyURL + styleNums + ".html";
+        $.get(url, function(response) {
+            console.log(response);
+        });
+    }
     </script>
 </body>
 </html>
