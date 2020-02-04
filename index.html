@@ -6,22 +6,133 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Scrape Work</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="js/bootstrap.min.js"></script>
+    <style>
+        .scraperAside{display:block;font-size:0.85rem;font-style:italic;background-color:#d6d6d6;padding:15px;margin-top:5px;}
+        .scraperH1{font-size:1.5rem;text-transform:uppercase;border-bottom:2px solid;margin-top:25px;}
+        .scraperInput{padding-left:5px;border-width:1px;border-top:none;border-right:none;border-left:none;border-bottom: 2px solid #d6d6d6;height:35px}
+        .scraperBTN{background:#000;color:#fff;text-transform:uppercase;height:35px;font-size:0.8rem;margin-left:15px;}
+        .scraperBTN:hover{color:#fbe000;}
+        .resultsAside{display:block;font-size:1rem;background-color:#f1f1f1;padding:15px;margin-top:5px;border:1px solid #000;min-height: 90px;}
+        .marginTop{margin-top:15px;}
+        .centerTheText{text-align:center;}
+        .noMargin{margin: 0 auto;}
+        .resultsBlock{text-transform: uppercase;font-size: 0.8rem;border-bottom: 1px solid;}
+        .itemsFound{display:block;font-size:0.9rem;margin-top:5px;}
+        .dropdownSelect{display: block;margin-bottom:10px;font-size:0.85rem;min-height:35px;}
+        .blackBar{background:#000;color:#fff;font-size:0.7rem;text-align:center;padding:5px;}
+    </style>
 </head>
 <body>
-    <h1>SKU Scraper</h1>
-    <input id = "styleNums" placeholder="Style Numbers"></input>
-    <button value='send' id="submit" onclick="getStyles()">Submit</button>
-
+    <div class="row blackBar ml-0 mr-0">
+        <p class="noMargin">The below apps may take a few extra seconds to work if ran after a 30 minute inactive period as it wakes up an external server to process the information.</p>
+    </div>
+    <div class="row ml-0 mr-0">
+        <div class="col-md-6 offset-md-3 col-10 offset-1">
+            <img class="marginTop" src="images/RockyBrands.png">
+            <h1 class="scraperH1">SKU Scraper</h1>
+            <p>To get a list of SKUs please provide what site you would like info from as well as the page name.
+                <span class="scraperAside">For example: You'd like to check Rocky Boots and all the styles that populate on the Waterproof Boots page (rockyboots.com/waterproof-boots/). Just select Rocky Brands from the menu and then input "waterproof-boots" into the search field and hit submit.</span>
+            </p>
+            <form>
+                <select size="1" id="siteSelection" class="dropdownSelect">
+                    <option value=""> - Select Site - </option>
+                    <option value="RB">Rocky Boots</option>
+                    <option value="GB">Georgia Boot</option>
+                    <option value="DB">Durango Boots</option>
+                    <option value="LO">Lehigh Outfitters</option>
+                    <option value="LSS">Lehigh Safety Shoes</option>
+                    <option value="SG">SlipGrips</option>
+                </select>
+                <input id="styleNums" placeholder="Input Page Name" class="scraperInput"></input>
+                <button type="button" class="scraperBTN" value='send' id="submit" onclick="getStyles()">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div class="row marginTop fullResults ml-0 mr-0">
+        <div class="col-md-6 offset-md-3 col-10 offset-1">
+            <div class="centerTheText">
+                <p class="resultsAside">
+                    <span class="noMargin resultsBlock">Results</span>
+                    <span class="itemsFound" id="totalItemsFound"></span>
+                    <span class="itemsFound" id="eachItemFound"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="row ml-0 mr-0">
+        <div class="col-md-6 offset-md-3 col-10 offset-1">
+            <h1 class="scraperH1">Style Info</h1>
+            <p>To get info of your SKUs please provide what site you would like info from as well as a comma separated list of style numbers.
+                <span class="scraperAside">For example: You'd like to check Georgia Boot and grab all the info for your specific styles. Just select Georgia Boot from the menu and then input your style numbers (G8374,G5594,G5814,etc.) into the search field and hit submit.</span>
+            </p>
+            <input id="styleInfo" placeholder="Style Numbers" class="scraperInput"></input>
+            <button type="button" class="scraperBTN" value='send' id="submit" onclick="">Submit</button>
+        </div>
+    </div> -->
     <script>
     function getStyles() {
+        // Get the values from user for URL param and site selection
         let styleNums = document.getElementById("styleNums").value;
-        console.log(styleNums);
-        let rockyURL = "https://www.rockyboots.com/";
-        var url = "https://cors-anywhere.herokuapp.com/" + rockyURL + styleNums + ".html";
-        $.get(url, function(response) {
-            console.log(response);
+        let selectElement = document.querySelector('#siteSelection');   
+        let siteOutput = selectElement.value;
+        // Set the boolean
+        let correctResponse = 0;
+        var buildURL;
+
+        // Start logic loop to set the base URL
+        while (correctResponse != 1) {
+            if (siteOutput === "RB"){
+                buildURL = "https://www.rockyboots.com/";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "GB") {
+                buildURL = "https://www.georgiaboot.com/";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "DB") {
+                buildURL = "https://www.durangoboots.com/";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "LO") {
+                buildURL = "https://www.lehighoutfitters.com/";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "LSS") {
+                buildURL = "https://www.lehighsafetyshoes.com/";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "SG") {
+                buildURL = "https://www.slipgrips.com/";
+                correctResponse = 1;
+            }
+            else {
+                console.log("We shouldn't have this showing");
+            }
+        }
+
+        // Attach our build URL to the API to bypass CORS
+        var url = "https://rockybrands.herokuapp.com/" + buildURL + styleNums;
+        var request = $.get(url, function(response) {
+            var fullText = request.responseText;
+            var subStr = fullText.match("<div class=\"product-result-count d-none d-lg-block\">\n(.*) Items\n</div>");
+            subStr = subStr[1];
+            // Change base url to include total number of styles
+            url = url + "/?sz=" + subStr;
+            // Post the total styles amount to the inner div
+            document.getElementById("totalItemsFound").innerHTML = "Total Styles Found: " + subStr;
+            request = $.get(url, function(response) {
+                fullText = request.responseText;
+                var styleArr; 
+                for (var i=0;i<subStr;i++) {
+                    var regex = /visually-hidden bfx-price-product bfx-sku">(.*)<\/span/;
+                    styleArr = fullText.match(regex)[1];
+                    console.log(styleArr);
+                    document.getElementById("eachItemFound").innerHTML = styleArr + ",";
+                }
+            });
         });
     }
     </script>
