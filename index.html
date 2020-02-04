@@ -12,7 +12,7 @@
     <style>
         .scraperAside{display:block;font-size:0.85rem;font-style:italic;background-color:#d6d6d6;padding:15px;margin-top:5px;}
         .scraperH1{font-size:1.5rem;text-transform:uppercase;border-bottom:2px solid;margin-top:25px;}
-        .scraperInput{padding-left:5px;border-width:1px;border-top:none;border-right:none;border-left:none;border-bottom: 2px solid #d6d6d6;height:35px}
+        .scraperInput{padding-left:5px;border-width:1px;border-top:none;border-right:none;border-left:none;border-bottom: 2px solid #d6d6d6;height:35px;min-width:30%;}
         .scraperBTN{background:#000;color:#fff;text-transform:uppercase;height:35px;font-size:0.8rem;margin-left:15px;}
         .scraperBTN:hover{color:#fbe000;}
         .resultsAside{display:block;font-size:1rem;background-color:#f1f1f1;padding:15px;margin-top:5px;border:1px solid #000;min-height: 90px;}
@@ -23,6 +23,7 @@
         .itemsFound{display:block;font-size:0.9rem;margin-top:5px;}
         .dropdownSelect{display: block;margin-bottom:10px;font-size:0.85rem;min-height:35px;}
         .blackBar{background:#000;color:#fff;font-size:0.7rem;text-align:center;padding:5px;}
+        #eachItemFound{word-break:break-all;}
     </style>
 </head>
 <body>
@@ -74,15 +75,12 @@
     </div> -->
     <script>
     function getStyles() {
-        // Get the values from user for URL param and site selection
         let styleNums = document.getElementById("styleNums").value;
         let selectElement = document.querySelector('#siteSelection');   
         let siteOutput = selectElement.value;
-        // Set the boolean
         let correctResponse = 0;
         var buildURL;
 
-        // Start logic loop to set the base URL
         while (correctResponse != 1) {
             if (siteOutput === "RB"){
                 buildURL = "https://www.rockyboots.com/";
@@ -113,25 +111,26 @@
             }
         }
 
-        // Attach our build URL to the API to bypass CORS
         var url = "https://rockybrands.herokuapp.com/" + buildURL + styleNums;
         var request = $.get(url, function(response) {
             var fullText = request.responseText;
             var subStr = fullText.match("<div class=\"product-result-count d-none d-lg-block\">\n(.*) Items\n</div>");
             subStr = subStr[1];
-            // Change base url to include total number of styles
             url = url + "/?sz=" + subStr;
-            // Post the total styles amount to the inner div
             document.getElementById("totalItemsFound").innerHTML = "Total Styles Found: " + subStr;
             request = $.get(url, function(response) {
                 fullText = request.responseText;
-                var styleArr; 
-                for (var i=0;i<subStr;i++) {
-                    var regex = /visually-hidden bfx-price-product bfx-sku">(.*)<\/span/;
-                    styleArr = fullText.match(regex)[1];
-                    console.log(styleArr);
-                    document.getElementById("eachItemFound").innerHTML = styleArr + ",";
+                var styleArr = [], styleList = []; 
+                var regex = /visually-hidden bfx-price-product bfx-sku">(.*)<\/span/gm;
+                try {
+                    for (var i = 0; ((styleArr = regex.exec(fullText)[1]) !== null); i++) {
+                            styleList[i] = `${styleArr}`;
+                    }
                 }
+                catch (error) {
+                        console.error('TypeError Found. That\'s expected behavior when no more matches are found. Moving along...');
+                }
+                document.getElementById("eachItemFound").innerHTML = (styleList + ",").slice(0,-1);
             });
         });
     }
