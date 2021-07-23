@@ -111,6 +111,7 @@
             var fullText = request.responseText;
             var subStr = fullText.match("<div class=\"product-result-count d-none d-lg-block\">\n(.*) Items\n</div>");
             subStr = subStr[1];
+            subStr = subStr.split(',').join('');
             url = url + "/?sz=" + subStr;
             document.getElementById("totalItemsFound").innerHTML = "Total Styles Found: " + subStr;
             request = $.get(url, function(response) {

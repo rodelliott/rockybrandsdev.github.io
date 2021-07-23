@@ -77,11 +77,11 @@
         var buildURL;
         while (correctResponse != 1) {
             if (siteOutput === "RB"){
-                buildURL = "https://api.bazaarvoice.com/data/products.json?apiversion=5.4&passkey=llmbkmz0zqxdtpx3ce9p4kg5u&Filter=AverageOverallRating:gte:4.75&IsActive&limit=100&offset=0&Filter=TotalReviewCount:gte:5";
+                buildURL = "https://api.bazaarvoice.com/data/products.json?apiversion=5.4&passkey=llmbkmz0zqxdtpx3ce9p4kg5u&Filter=AverageOverallRating:gte:4.5&IsActive&limit=100&offset=200&Filter=TotalReviewCount:gte:3";
                 correctResponse = 1;
             }
             else if (siteOutput === "GB") {
-                buildURL = "https://api.bazaarvoice.com/data/products.json?apiversion=5.4&passkey=e90apqwx7bm91itvzpqh109pe&Filter=AverageOverallRating:gte:4.75&IsActive&limit=100&offset=0&Filter=TotalReviewCount:gte:5";
+                buildURL = "https://api.bazaarvoice.com/data/products.json?apiversion=5.4&passkey=e90apqwx7bm91itvzpqh109pe&Filter=AverageOverallRating:gte:4.5&IsActive&limit=100&offset=0&Filter=TotalReviewCount:gte:3";
                 correctResponse = 1;
             }
             else if (siteOutput === "DB") {
