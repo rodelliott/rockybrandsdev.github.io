@@ -45,7 +45,7 @@
         <div class="col-md-4 offset-md-1 col-10 offset-1">
             <h1 class="scraperH1">Search Scraper</h1>
             <p>To get a list of SKUs please provide what site you would like info from as well as the search term.
-                <span class="scraperAside">For example: You'd like to check Rocky Boots and obtain a list of styles that populate on the search results page for <b><i>duty</i></b> (https://www.rockyboots.com/Search?q=duty&lang=en_US). Just select Rocky Brands from the menu and then input <b><i>duty</i></b> into the search field and hit submit.</span>
+                <span class="scraperAside">For example: You'd like to check Rocky Boots and obtain a list of styles that populate on the search results page for <b><i>duty</i></b> (/Search?q=duty). Just select Rocky Brands from the menu and then input <b><i>duty</i></b> into the search field and hit submit.</span>
             </p>
             <form>
                 <p class="mb-0">Select Your Site</p>
@@ -56,6 +56,8 @@
                     <option value="LO">Lehigh Outfitters</option>
                     <option value="LSS">Lehigh Safety Shoes</option>
                     <option value="SG">SlipGrips</option>
+                    <option value="MB">Muck Boot</option>
+                    <option value="XT">Xtratuf</option>
                 </select>
                 <input id="styleNums" placeholder="Search Term (e.g. duty)" class="scraperInput"></input>
                 <button type="button" class="scraperBTN" value='send' id="submit" onclick="getSearchStyles()">Submit</button>
@@ -77,6 +79,8 @@
                     <option value="LO">Lehigh Outfitters</option>
                     <option value="LSS">Lehigh Safety Shoes</option>
                     <option value="SG">SlipGrips</option>
+                    <option value="MB">Muck Boot</option>
+                    <option value="XT">Xtratuf</option>
                 </select>
                 <input id="styleNums1" placeholder="Input Page Name" class="scraperInput"></input>
                 <button type="button" class="scraperBTN" value='send' id="submit" onclick="getStyles()">Submit</button>
@@ -135,6 +139,14 @@
             }
             else if (siteOutput === "SG") {
                 buildURL = "https://www.slipgrips.com/Search?q=";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "MB") {
+                buildURL = "https://www.muckbootcompany.com/Search?q=";
+                correctResponse = 1;
+            }
+            else if (siteOutput === "XT") {
+                buildURL = "https://www.xtratuf.com/Search?q=";
                 correctResponse = 1;
             }
             else {
@@ -205,6 +217,14 @@
                     }
                     else if (siteOutput1 === "SG") {
                         buildURL1 = "https://www.slipgrips.com/";
+                        correctResponse1 = 1;
+                    }
+                    else if (siteOutput1 === "MB") {
+                        buildURL1 = "https://www.muckbootcompany.com/";
+                        correctResponse1 = 1;
+                    }
+                    else if (siteOutput1 === "XT") {
+                        buildURL1 = "https://www.xtratuf.com/";
                         correctResponse1 = 1;
                     }
                     else {
